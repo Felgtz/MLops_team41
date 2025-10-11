@@ -1,0 +1,7 @@
+dvc[s3]==3.*         # control de datos y remoto S3
+papermill>=2.5       # ejecutar notebooks por CLI
+jupyter>=1.0         # nbconvert para exportar HTML
+pandas>=2.0
+scikit-learn>=1.4
+pyyaml>=6.0
+joblib>=1.3
