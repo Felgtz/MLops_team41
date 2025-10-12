@@ -1,0 +1,32 @@
+schema: '2.0'
+stages:
+  clean:
+    cmd: bash src/run_clean.sh
+    deps:
+    - path: 01_EDA_and_Data_Cleaning.ipynb
+      hash: md5
+      md5: d9a349670485900910d420f588a14123
+      size: 1063257
+    - path: data/raw
+      hash: md5
+      md5: 8cfe421e99541b996966271809ff6618.dir
+      size: 44593909
+      nfiles: 2
+    - path: src/run_clean.sh
+      hash: md5
+      md5: 49fbaf4db0c2fa41122eba4f92156ca3
+      size: 470
+      isexec: true
+    outs:
+    - path: data/processed/clean.csv
+      hash: md5
+      md5: 0314634914bfbaaae8582e5e1b04ed9f
+      size: 22174462
+    - path: reports/clean/CLEAN_run.html
+      hash: md5
+      md5: 1c7568063551cde6f046ad41652391b7
+      size: 1222085
+    - path: reports/clean/CLEAN_run.ipynb
+      hash: md5
+      md5: 8467ff1ad0f60767bfb97c3a1429214c
+      size: 1078876

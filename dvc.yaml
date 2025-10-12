@@ -2,20 +2,34 @@ stages:
   clean:
     cmd: bash src/run_clean.sh
     deps:
-      - src/run_clean.sh
-      - 01_EDA_and_Data_Cleaning.ipynb
-      - data/raw
+    - src/run_clean.sh
+    - 01_EDA_and_Data_Cleaning.ipynb
+    - data/raw
     outs:
-      - reports/clean/CLEAN_run.ipynb
-      - reports/clean/CLEAN_run.html
-      - data/processed/clean.csv
+    - reports/clean/CLEAN_run.ipynb
+    - reports/clean/CLEAN_run.html
+    - data/processed/clean.csv
 
   eda:
     cmd: bash src/run_eda.sh
     deps:
-      - src/run_eda.sh
-      - EDA_MLops_team41 ML.ipynb
-      - data/processed/clean.csv
+    - src/run_eda.sh
+    - EDA_MLops_team41 ML.ipynb
+    - data/processed/clean.csv
     outs:
-      - reports/eda/EDA_run.ipynb
-      - reports/eda/EDA_run.html
+    - reports/eda/EDA_run.ipynb
+    - reports/eda/EDA_run.html
+  train:
+    cmd: bash src/run_train.sh python3
+    deps:
+    - EDA_MLops_team41 ML.ipynb
+    - data/processed/clean.csv
+    - src/run_train.sh
+    outs:
+    - models/KNN.joblib
+    - models/Linear_Regression.joblib
+    - reports/models/ML_run.ipynb
+    - reports/models/cv_results_summary.csv
+    metrics:
+    - reports/models/metrics.json:
+        cache: false
