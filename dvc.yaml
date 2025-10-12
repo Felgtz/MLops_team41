@@ -1,0 +1,21 @@
+stages:
+  clean:
+    cmd: bash src/run_clean.sh
+    deps:
+      - src/run_clean.sh
+      - 01_EDA_and_Data_Cleaning.ipynb
+      - data/raw
+    outs:
+      - reports/clean/CLEAN_run.ipynb
+      - reports/clean/CLEAN_run.html
+      - data/processed/clean.csv
+
+  eda:
+    cmd: bash src/run_eda.sh
+    deps:
+      - src/run_eda.sh
+      - EDA_MLops_team41 ML.ipynb
+      - data/processed/clean.csv
+    outs:
+      - reports/eda/EDA_run.ipynb
+      - reports/eda/EDA_run.html
