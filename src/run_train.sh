@@ -1,12 +1,21 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
+KERNEL="${1:-python3}"   # kernel a usar (por defecto python3)
+NB_IN="EDA_MLops_team41 ML.ipynb"          # <-- ajusta si tu notebook tiene otro nombre
+NB_OUT="reports/models/ML_run.ipynb"
+
+# Carpetas de salida
 mkdir -p reports/models models
 
-papermill "EDA_MLops_team41 ML.ipynb" "reports/models/ML_run.ipynb" -k python3
+# 1) Ejecuta el notebook con papermill
+python -m papermill "$NB_IN" "$NB_OUT" -k "$KERNEL"
 
-jupyter nbconvert --to html --no-input --output-dir "reports/models" "reports/models/ML_run.ipynb"
+# 2) Convierte a HTML como evidencia
+python -m jupyter nbconvert --to html --no-input \
+  --output-dir "reports/models" "$NB_OUT"
 
+# 3) Validaciones mínimas de artefactos (ajusta si cambian nombres)
 test -f "reports/models/metrics.json"
 test -f "reports/models/cv_results_summary.csv"
 test -f "models/Linear_Regression.joblib"
