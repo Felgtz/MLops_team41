@@ -30,3 +30,65 @@ stages:
       hash: md5
       md5: 8467ff1ad0f60767bfb97c3a1429214c
       size: 1078876
+  eda:
+    cmd: bash src/run_eda.sh
+    deps:
+    - path: EDA_MLops_team41 ML.ipynb
+      hash: md5
+      md5: 8c44a845233621b1b2514fd89782ef78
+      size: 4337205
+    - path: data/processed/clean.csv
+      hash: md5
+      md5: 0314634914bfbaaae8582e5e1b04ed9f
+      size: 22174462
+    - path: src/run_eda.sh
+      hash: md5
+      md5: 67a18eac00a729ecab4dda940faaae16
+      size: 549
+      isexec: true
+    outs:
+    - path: reports/eda/EDA_run.html
+      hash: md5
+      md5: 863a71ea741bf15385a9b1c03a760f73
+      size: 4474772
+    - path: reports/eda/EDA_run.ipynb
+      hash: md5
+      md5: 9b38ebadb1edb6be946f72f9146ed95d
+      size: 4315295
+  train:
+    cmd: bash src/run_train.sh python3
+    deps:
+    - path: EDA_MLops_team41 ML.ipynb
+      hash: md5
+      md5: d69a814dd9594e85cedb490683bbe3d8
+      size: 4336330
+    - path: data/processed/clean.csv
+      hash: md5
+      md5: 0314634914bfbaaae8582e5e1b04ed9f
+      size: 22174462
+    - path: src/run_train.sh
+      hash: md5
+      md5: 2876da3410ccf22c78a8e045b8c2fcaa
+      size: 779
+      isexec: true
+    outs:
+    - path: models/KNN.joblib
+      hash: md5
+      md5: ee840cc859b191fe57a4cbb5195a4fce
+      size: 13082639
+    - path: models/Linear_Regression.joblib
+      hash: md5
+      md5: 415a5abb15bf5ab3930995045c968b97
+      size: 10066
+    - path: reports/models/ML_run.ipynb
+      hash: md5
+      md5: 04b921742b773a0de82eefd2df5a4034
+      size: 4313382
+    - path: reports/models/cv_results_summary.csv
+      hash: md5
+      md5: e302fba206036c8d8b2bf49b6259522d
+      size: 167
+    - path: reports/models/metrics.json
+      hash: md5
+      md5: a5a8254390815413d756e332f58a7a41
+      size: 73
