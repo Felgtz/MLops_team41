@@ -20,10 +20,12 @@ The goal of this phase is to clean and prepare data, explore and preprocess feat
 │   ├── V2_02_Data_Exploration_and_Preprocessing.ipynb   # 2nd version of EDA + preprocessing (author: Felipe, MLE)
 │   └── V2_03_Model_Construction_and_Evaluation.ipynb    # 2nd version of modeling + evaluation (author: Felipe, MLE)
 ├── Machine Learning Canvas - Online News Popularity     # ML Canvas and value proposition
+├── reports/
+│   ├── Executuve Deck v2.pdf             # 2nd version of executive Deck, a presentation of the Phase 1 for stakeholders
+│   ├── MLOps team 41 presentation.mp4    # Video presentation of Executive Deck v2
 ├── dvc.yaml                              # DVC pipeline definition (if applicable)
 ├── dvc.lock                              # DVC lockfile (generated)
 ├── .dvc/                                 # DVC metadata
-├── requirements.txt                      # Python dependencies
 └── README.md
 ```
 
