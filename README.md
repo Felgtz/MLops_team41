@@ -100,3 +100,6 @@ The goal of this phase is to clean and prepare data, explore and preprocess feat
 
 ## License and credits
 - This work includes a structured ML Canvas adapted from Louis Dorard, Ph.D., under CC BY-SA 4.0. Attribution retained per license. Course deliverables authored by Team 41 for academic purposes.
+
+##VIDEO
+-https://youtu.be/dAoLZClsZGE 
