@@ -36,6 +36,12 @@ The goal of this phase is to clean and prepare data, explore and preprocess feat
 | **Software Engineer** | Ana Karen Estupiñán Pacheco (A01796893) | Data and model versioning using DVC; coordination with Git for reproducibility. |
 | **Data Engineer** | Ángel Iván Ahumada Arguelles (A00398508) | Executive presentation and pipeline narrative for Phase 1 deliverables. |
 
+##Tools and Technologies
+- **Python**, **Pandas**, **Scikit-learn**, **Matplotlib**
+- **Google Colab** for notebooks
+- **DVC** for data and model versioning
+- **GitHub** for collaborative version control
+
 ## Deliverables (Phase 1)
 
 1. **01_EDA_and_Data_Cleaning.ipynb**  
@@ -52,6 +58,11 @@ The goal of this phase is to clean and prepare data, explore and preprocess feat
    - Team explanation of Phase 1 work aligned with the rubric.
 6. **DVC repository**  
    - Tracks data and model artifacts; enables exact reproducibility.
+
+## Results Summary
+- **Mean correlation difference (Δ):** 0.0297 → strong feature preservation.
+- **Best Model:** KNN (RMSE ≈ 3975, MAE ≈ 2350).
+- **Outcome:** Solid baseline for predictive modeling of online news popularity.
 
 ## How to run locally
 
