@@ -1,105 +1,176 @@
 # MLOps Team 41 – Online News Popularity
 
 ## Project Overview
-This repository contains the complete work developed during **Phase 1** of the MLOps course at Tecnológico de Monterrey (Applied Artificial Intelligence MNA program).  
-The dataset analyzed corresponds to **Online News Popularity**, focused on predicting the number of social media shares of news articles.
-The goal of this phase is to clean and prepare data, explore and preprocess features, version artifacts, and train baseline models with documented methodology.
+This repository contains the complete work developed during **Phase 1** of the MLOps course at **Tecnológico de Monterrey (Applied Artificial Intelligence – MNA Program)**.  
+The dataset analyzed corresponds to **Online News Popularity**, focused on predicting the number of social media shares of news articles published by Mashable.
 
-## Repository structure
+The goal of this phase was to:
+1. **Clean and validate** a noisy dataset.
+2. **Explore and preprocess** relevant features.
+3. **Version artifacts and models** using DVC.
+4. **Train and evaluate baseline models** with full reproducibility.
+
+---
+
+## Repository Structure
 
 ```
 .
 ├── data/
-│   ├── df_final_validated.csv           # cleaned dataset (Phase 1 output of 01 notebook)
-│   └── online_news_original             # original dataset retrieved from UCI ML Repository
-│   └── online_news_modified             # modified dataset provided by the TA's with intentional noise
+│   ├── df_final_validated.csv           # Cleaned dataset (output of notebook 01)
+│   ├── features_used.csv                # Feature list used during model training
+│   ├── online_news_original.csv         # Original dataset from UCI ML Repository
+│   └── online_news_modified.csv         # Modified dataset provided by TA’s (with injected inconsistencies)
+│
 ├── notebooks/
-│   ├── 01_EDA_and_Data_Cleaning.ipynb                   # First version of data repair, validation, export (author: Steven, DS)
-│   ├── EDA_MLops_team41 ML.ipynb                        # First version of EDA + preprocessing + modeling + evaluation (author: Felipe, MLE)
-│   ├── V2_01_EDA_and_Data_Cleaning.ipynb                # Second version of data repair, validation, export (author: Steven, DS)
-│   ├── V2_02_Data_Exploration_and_Preprocessing.ipynb   # 2nd version of EDA + preprocessing (author: Felipe, MLE)
-│   └── V2_03_Model_Construction_and_Evaluation.ipynb    # 2nd version of modeling + evaluation (author: Felipe, MLE)
-├── Machine Learning Canvas - Online News Popularity     # ML Canvas and value proposition
+│   ├── V2_01_EDA_and_Data_Cleaning.ipynb                # Data repair, validation, and export (author: Steven)
+│   ├── V2_02_Data_Exploration_and_Preprocessing.ipynb   # Exploratory analysis, feature scaling, encoding (author: Steven)
+│   └── V2_03_Model_Construction_and_Evaluation.ipynb    # Modeling, evaluation, and model selection (author: Steven)
+│
 ├── reports/
-│   ├── Executuve Deck v2.pdf             # 2nd version of executive Deck, a presentation of the Phase 1 for stakeholders
-│   ├── MLOps team 41 presentation.mp4    # Video presentation of Executive Deck v2
-├── dvc.yaml                              # DVC pipeline definition (if applicable)
-├── dvc.lock                              # DVC lockfile (generated)
-├── .dvc/                                 # DVC metadata
+│   ├── Executive_Deck_Final.pdf         # Final stakeholder presentation (Phase 1 summary)
+│   ├── Executive_Deck_v2.pdf            # Early version of the presentation
+│   ├── MLOps_team41_presentation.mp4    # Video presentation of the Phase 1 results
+│
+├── Machine Learning Canvas - Online News Popularity.pdf  # ML Canvas and value proposition
+│
+├── dvc.yaml                              # DVC pipeline definition
+├── dvc.lock                              # DVC lockfile
+├── .dvc/                                 # DVC metadata folder
 └── README.md
 ```
 
-## Roles and responsibilities (Phase 1)
+---
 
-| Role | Member | Main responsibilities |
-|------|--------|-----------------------|
-| **Data Scientist** | Steven Sebastian Brutscher Cortez Brutscher (A01732505) | Data repair, domain enforcement, imputations, validation and export of `df_final_validated.csv`; documentation. |
-| **ML Engineer** | Felipe de Jesús Gutiérrez Dávila (A01360023) | EDA, preprocessing, feature preparation; baseline and tuned models; evaluation. |
-| **Software Engineer** | Ana Karen Estupiñán Pacheco (A01796893) | Data and model versioning using DVC; coordination with Git for reproducibility. |
-| **Data Engineer** | Ángel Iván Ahumada Arguelles (A00398508) | Executive presentation and pipeline narrative for Phase 1 deliverables. |
+## Roles and Responsibilities (Phase 1)
 
-##Tools and Technologies
-- **Python**, **Pandas**, **Scikit-learn**, **Matplotlib**
-- **Google Colab** for notebooks
-- **DVC** for data and model versioning
-- **GitHub** for collaborative version control
+| Role | Member | Main Responsibilities |
+|------|--------|------------------------|
+| **Data Scientist** | **Steven Sebastian Brutscher Cortez (A01732505)** | Data repair, imputation, domain validation, export of `df_final_validated.csv`; documentation and reproducibility. |
+| **ML Engineer** | **Felipe de Jesús Gutiérrez Dávila (A01360023)** | Preliminary EDA, preprocessing references, initial baselines. |
+| **Software Engineer** | **Ana Karen Estupiñán Pacheco (A01796893)** | Data and model versioning using **DVC**; integration with Git for experiment reproducibility. |
+| **Data Engineer** | **Ángel Iván Ahumada Arguelles (A00398508)** | Executive presentation and pipeline documentation for Phase 1 deliverables. |
+
+---
+
+## Tools and Technologies
+
+- **Python**, **Pandas**, **NumPy**, **Scikit-learn**, **Matplotlib**, **Seaborn**
+- **Google Colab** (development and experimentation)
+- **DVC** for artifact and model versioning
+- **GitHub** for collaborative version control and documentation
+
+---
 
 ## Deliverables (Phase 1)
 
-1. **01_EDA_and_Data_Cleaning.ipynb**  
-   - Repairs domains and logical constraints across all feature families (proportions, polarities, binaries, LDA topics).  
-   - Stabilizes distributions and exports `data/df_final_validated.csv`.
-2. **02_Data_Exploration_and_Preprocessing.ipynb**  
-   - Descriptive statistics, visual EDA, correlation analysis.  
-   - Feature preprocessing: scaling, encoding, and dataset split export.
-3. **03_Model_Construction_and_Evaluation.ipynb**  
-   - Baseline and tuned models; metrics and error analysis; model selection rationale.
-4. **Executive deck (PDF)**  
-   - Summary of approach, key evidence, and handoff notes for Phase 2.
-5. **Short video (5–10 min)**  
-   - Team explanation of Phase 1 work aligned with the rubric.
-6. **DVC repository**  
-   - Tracks data and model artifacts; enables exact reproducibility.
+1. **V2_01_EDA_and_Data_Cleaning.ipynb**  
+   - Repairs invalid values and enforces domain constraints (proportions, polarities, binaries, LDA topics).  
+   - Exports the final validated dataset `data/df_final_validated.csv`.
+
+2. **V2_02_Data_Exploration_and_Preprocessing.ipynb**  
+   - Generates descriptive statistics, correlations, and distribution insights.  
+   - Scales and encodes features; exports final ready-to-model dataset.
+
+3. **V2_03_Model_Construction_and_Evaluation.ipynb**  
+   - Compares multiple regression baselines: Linear, Ridge, KNN, Random Forest, Decision Tree, and XGBoost.  
+   - Evaluates results using **MAE**, **RMSE**, and **R²** metrics on original scale.  
+   - Selects XGBoost as the most consistent and generalizable model.
+
+4. **Executive Deck (Final PDF)**  
+   - Summarizes project scope, key findings, and methodology for academic presentation.
+
+5. **Video Presentation (MP4)**  
+   - 5–10 minute explanation of the project and Phase 1 workflow.
+
+6. **DVC Repository**  
+   - Tracks datasets, features, and model artifacts to ensure full reproducibility of the workflow.
+
+---
 
 ## Results Summary
-- **Mean correlation difference (Δ):** 0.0297 → strong feature preservation.
-- **Best Model:** KNN (RMSE ≈ 3975, MAE ≈ 2350).
-- **Outcome:** Solid baseline for predictive modeling of online news popularity.
 
-## How to run locally
+**Model Comparison (Test Set Performance)**
 
-1. Create and activate a Python environment.
-2. Install dependencies:
+| Model | MAE_test | RMSE_test | R²_test |
+|:------|----------:|-----------:|---------:|
+| **XGBoost** | **1851.43** | **4018.48** | **0.0116** |
+| Random Forest | 1878.84 | 4028.64 | 0.0066 |
+| KNN (k=15) | 1924.58 | 4111.83 | -0.0348 |
+| Ridge Regression | 1911.31 | 4114.96 | -0.0364 |
+| Linear Regression | 1911.31 | 4114.95 | -0.0364 |
+| Decision Tree | 2712.27 | 4930.57 | -0.4880 |
+
+**Interpretation:**
+- The **XGBoost Regressor** achieved the best performance overall, with the lowest MAE/RMSE and the only positive R², confirming slight predictive power over random baselines.  
+- The **Random Forest** performed similarly, validating the strength of ensemble methods on this dataset.  
+- Simpler models (Linear, Ridge) could not capture non-linear relationships, while the **Decision Tree** overfitted the data.  
+- Overall, the models confirm the high noise and non-linearity in predicting article virality, consistent with prior research (Fernandes et al., 2015).
+
+**Outcome:**  
+Phase 1 successfully delivered a **fully reproducible pipeline** capable of training and evaluating machine learning baselines on the *Online News Popularity* dataset.  
+The **XGBoost model** is selected as the foundation for **Phase 2 hyperparameter tuning** and **feature explainability (SHAP/LIME)** analysis.
+
+---
+
+## How to Run Locally
+
+1. **Create and activate a Python environment:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # (Linux/Mac)
+   venv\Scripts\activate     # (Windows)
+   ```
+
+2. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
-3. If using DVC, pull versioned artifacts:
+
+3. **If using DVC, pull versioned artifacts:**
    ```bash
    dvc pull
    ```
-4. Open the notebooks in order:
-   - `notebooks/01_EDA_and_Data_Cleaning.ipynb`
-   - `notebooks/02_Data_Exploration_and_Preprocessing.ipynb`
-   - `notebooks/03_Model_Construction_and_Evaluation.ipynb`
 
-## DVC quick reference
+4. **Run notebooks sequentially:**
+   - `notebooks/V2_01_EDA_and_Data_Cleaning.ipynb`
+   - `notebooks/V2_02_Data_Exploration_and_Preprocessing.ipynb`
+   - `notebooks/V2_03_Model_Construction_and_Evaluation.ipynb`
 
-- Initialize: `dvc init`  
-- Track a file: `dvc add data/df_final_validated.csv`  
-- Commit to Git: `git add data/df_final_validated.csv.dvc .gitignore && git commit -m "Track cleaned dataset with DVC"`  
-- Set remote storage: `dvc remote add -d origin <remote-url>`  
-- Push artifacts: `dvc push`  
-- Reproduce pipeline: `dvc repro` (if `dvc.yaml` is defined)
+---
+
+## DVC Quick Reference
+
+| Action | Command |
+|:--------|:---------|
+| Initialize DVC | `dvc init` |
+| Track file | `dvc add data/df_final_validated.csv` |
+| Commit to Git | `git add data/df_final_validated.csv.dvc .gitignore && git commit -m "Track cleaned dataset with DVC"` |
+| Set remote storage | `dvc remote add -d origin <remote-url>` |
+| Push artifacts | `dvc push` |
+| Reproduce pipeline | `dvc repro` |
+
+---
 
 ## References
 
-- UCI Machine Learning Repository: Online News Popularity.  
-- Fernandes, Vinagre, Cortez (2015). *A Proactive Intelligent Decision Support System for Predicting the Popularity of Online News*.
-- Course materials and Phase 1 rubric.
-- Team notebooks and DVC logs.
+- **UCI Machine Learning Repository:** Online News Popularity dataset.  
+- **Fernandes, Vinagre, & Cortez (2015):** *A Proactive Intelligent Decision Support System for Predicting the Popularity of Online News.*  
+- Course materials and MLOps Phase 1 rubric (Tecnológico de Monterrey).  
+- Internal documentation and DVC logs.
 
-## License and credits
-- This work includes a structured ML Canvas adapted from Louis Dorard, Ph.D., under CC BY-SA 4.0. Attribution retained per license. Course deliverables authored by Team 41 for academic purposes.
+---
 
-##VIDEO
--https://youtu.be/dAoLZClsZGE 
+## License and Credits
+
+This work includes a structured **Machine Learning Canvas** adapted from Louis Dorard, Ph.D., under **CC BY-SA 4.0**.  
+All other content authored by **MLOps Team 41** for academic and non-commercial purposes.
+
+---
+
+## Video Presentations
+
+- **Version 1:** [https://youtu.be/dAoLZClsZGE] 
+- **Version 2 (Final):** *(link pending upload)*
+
+---
