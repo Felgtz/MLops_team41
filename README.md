@@ -171,6 +171,6 @@ All other content authored by **MLOps Team 41** for academic and non-commercial 
 ## Video Presentations
 
 - **Version 1:** [https://youtu.be/dAoLZClsZGE] 
-- **Version 2 (Final):** *(link pending upload)*
+- **Version 2 (Final):** [https://youtu.be/tNr6qelOBl8] 
 
 ---
