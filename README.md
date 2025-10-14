@@ -24,8 +24,8 @@ The goal of this phase was to:
 │
 ├── notebooks/
 │   ├── V2_01_EDA_and_Data_Cleaning.ipynb                # Data repair, validation, and export (author: Steven)
-│   ├── V2_02_Data_Exploration_and_Preprocessing.ipynb   # Exploratory analysis, feature scaling, encoding (author: Steven)
-│   └── V2_03_Model_Construction_and_Evaluation.ipynb    # Modeling, evaluation, and model selection (author: Steven)
+│   ├── V2_02_Data_Exploration_and_Preprocessing.ipynb   # Exploratory analysis, feature scaling, encoding (author: Felipe)
+│   └── V2_03_Model_Construction_and_Evaluation.ipynb    # Modeling, evaluation, and model selection (author: Felipe & Steven)
 │
 ├── reports/
 │   ├── Executive_Deck_Final.pdf         # Final stakeholder presentation (Phase 1 summary)
