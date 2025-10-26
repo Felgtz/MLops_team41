@@ -1,5 +1,7 @@
 [core]
-    remote = gdrive
+    remote = sharedlocal
     autostage = true
 ['remote "gdrive"']
     url = gdrive://1qY1f95mEzZuu5QqtBzcatAkJIwenRlwz
+['remote "sharedlocal"']
+    url = G:\Mi unidad\MLOps\dvc_storage
