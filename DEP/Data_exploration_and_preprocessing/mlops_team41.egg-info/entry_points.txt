@@ -1,0 +1,2 @@
+[console_scripts]
+mlops41 = src.cli:main
