@@ -1,0 +1,15 @@
+stages:
+  dep_preprocess:
+    cmd: python -m src.cli preprocess
+    wdir: DEP/Data_exploration_and_preprocessing
+    deps:
+    - data/raw/df_final_validated.csv
+    - src/cli.py
+    - src/config.py
+    - src/data.py
+    - src/features.py
+    - src/logger.py
+    - src/visualization.py
+    outs:
+    - data/processed/df_ready_for_modeling.csv
+    - reports/figures

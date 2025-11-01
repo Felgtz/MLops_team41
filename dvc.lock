@@ -1,0 +1,43 @@
+schema: '2.0'
+stages:
+  dep_preprocess:
+    cmd: python -m src.cli preprocess
+    deps:
+    - path: data/raw/df_final_validated.csv
+      hash: md5
+      md5: e4c0fece8fd2ed00e273f382fab7042e
+      size: 22784696
+    - path: src/cli.py
+      hash: md5
+      md5: b56dd75f602ff306100447c391df05d3
+      size: 4001
+    - path: src/config.py
+      hash: md5
+      md5: 5093d6e3d60e17404f75e01ba61aa62e
+      size: 1498
+    - path: src/data.py
+      hash: md5
+      md5: 8babfa72386d382689f8205373faf988
+      size: 4223
+    - path: src/features.py
+      hash: md5
+      md5: cd644b227ca934440aebf75fad3ba27f
+      size: 5487
+    - path: src/logger.py
+      hash: md5
+      md5: 16ad8fd746b84c60a93e73340e94b8ef
+      size: 2945
+    - path: src/visualization.py
+      hash: md5
+      md5: 486eae8bee7b778a74d3b6e10365d610
+      size: 5360
+    outs:
+    - path: data/processed/df_ready_for_modeling.csv
+      hash: md5
+      md5: 46e3dfbf29bdaa62dafab861af3da590
+      size: 49036588
+    - path: reports/figures
+      hash: md5
+      md5: 55ea92e1ad63fbfbc79ed13f61582a50.dir
+      size: 3928991
+      nfiles: 62
