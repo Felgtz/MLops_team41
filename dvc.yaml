@@ -13,3 +13,19 @@ stages:
     outs:
     - data/processed/df_ready_for_modeling.csv
     - reports/figures
+  eda_clean:
+    cmd: >
+      python -m online_news_popularity.pipeline.clean_dataset
+      --raw data/raw/online_news_modified.csv
+      --reference data/raw/online_news_original.csv
+      --final data/processed/df_final_validated.csv
+    wdir: EDA/online-news-popularity
+    deps:
+      - src/online_news_popularity/pipeline/clean_dataset.py
+      - src/online_news_popularity/cleaning
+      - src/online_news_popularity/features
+      - data/raw/online_news_modified.csv
+      - data/raw/online_news_original.csv
+    outs:
+      - data/processed/df_final_validated.audit.json
+      - data/processed/df_final_validated.csv

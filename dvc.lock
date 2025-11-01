@@ -41,3 +41,38 @@ stages:
       md5: 55ea92e1ad63fbfbc79ed13f61582a50.dir
       size: 3928991
       nfiles: 62
+  eda_clean:
+    cmd: "python -m online_news_popularity.pipeline.clean_dataset --raw data/raw/online_news_modified.csv
+      --reference data/raw/online_news_original.csv --final data/processed/df_final_validated.csv\n"
+    deps:
+    - path: data/raw/online_news_modified.csv
+      hash: md5
+      md5: 090524048093aa39961f00534c030436
+      size: 22701243
+    - path: data/raw/online_news_original.csv
+      hash: md5
+      md5: f11d98504aa3147415859a982880729f
+      size: 21972748
+    - path: src/online_news_popularity/cleaning
+      hash: md5
+      md5: 2cde4e6ca626e62e5a2c67b05f5e0770.dir
+      size: 58408
+      nfiles: 10
+    - path: src/online_news_popularity/features
+      hash: md5
+      md5: 38e58217415b62c4dc3a3803cfcab1b9.dir
+      size: 7672
+      nfiles: 2
+    - path: src/online_news_popularity/pipeline/clean_dataset.py
+      hash: md5
+      md5: d430e717393e6c93b4086a753d8a4aec
+      size: 5784
+    outs:
+    - path: data/processed/df_final_validated.audit.json
+      hash: md5
+      md5: 3b2507f095148be90f7d48d511316325
+      size: 10585
+    - path: data/processed/df_final_validated.csv
+      hash: md5
+      md5: e4c0fece8fd2ed00e273f382fab7042e
+      size: 22784696
