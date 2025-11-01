@@ -1,0 +1,2 @@
+[console_scripts]
+onp-clean = online_news_popularity.pipeline.clean_dataset:main

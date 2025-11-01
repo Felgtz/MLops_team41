@@ -1,0 +1,27 @@
+# ---------------------------------------------------------------------------
+# Default locations for all major artefacts.
+#
+# • You can override any entry at runtime with Hydra’s `+` syntax, e.g.:
+#
+#     $ python -m online_news_popularity.pipeline.clean_dataset \
+#           +paths.raw=data/raw/v2/online_news_modified.csv \
+#           +paths.final=data/processed/v2/clean.csv
+#
+# • If the environment variables listed in the “env-fallback” comments
+#   are defined, they take precedence over the hard-coded value here.
+#
+# NOTE:  All paths are *project-relative* (resolved from repo root) unless
+#        you supply an absolute path, `s3://…`, `gs://…`, etc.  The IO layer
+#        uses fsspec, so remote buckets work as long as the right plugin is
+#        installed (s3fs, gcsfs, adlfs, …).
+# ---------------------------------------------------------------------------
+
+paths:
+  # Modified / noisy dataset (input of the cleaning pipeline)
+  raw: ${oc.env:ONP_RAW, "data/raw/online_news_modified.csv"}          # env-fallback = ONP_RAW
+
+  # Canonical reference (original UCI dataset) for statistical calibration
+  reference: ${oc.env:ONP_REF, "data/raw/online_news_original.csv"}    # env-fallback = ONP_REF
+
+  # Final cleaned, calibrated dataset (pipeline output)
+  final: ${oc.env:ONP_FINAL, "data/processed/df_final_validated.csv"}  # env-fallback = ONP_FINAL

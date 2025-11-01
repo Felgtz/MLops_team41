@@ -1,0 +1,57 @@
+# =============================================================================
+# Global cleaning pipeline configuration
+#
+# • This file is read by `online_news_popularity.pipeline.clean_dataset`
+#   when you launch          $ python -m …pipeline.clean_dataset
+#
+# • Any field can be overridden from the CLI, e.g.
+#       python -m online_news_popularity.pipeline.clean_dataset \
+#              calibration.clip_k=2  \
+#              +paths.raw=/data/v3/raw.csv
+#
+# • All *filesystem* parameters live in a separate file (`paths.yaml`)
+#   that gets pulled in through Hydra’s defaults mechanism.
+# =============================================================================
+
+defaults:
+  # Re-use the central path map (raw / reference / final)
+  - paths: paths
+
+  # (Optional) change job-logging, output dir, etc.
+  # - hydra/job_logging: colorlog
+  # - hydra/output: null
+
+  # keep this line last
+  - _self_
+
+# ---------------------------------------------------------------------------
+# IMPUTATION ─ group-wise strategies
+# ---------------------------------------------------------------------------
+imputation:
+  continuous_strategy: median      # currently only “median” supported
+  binary_strategy: mode            # mode(0/1) for one-hot flags
+  lda_strategy: median             # column median + row renormalisation
+  sentiment_strategy: median       # median within domain bounds
+  drop_rows_threshold_pct: 20.0    # (not used yet, placeholder)
+
+# ---------------------------------------------------------------------------
+# CALIBRATION ─ statistical alignment to the reference dataset
+# ---------------------------------------------------------------------------
+calibration:
+  clip_k: 3.0            # μ ± k σ for most heavy-tailed numeric columns
+  clip_k_shares: 4.0     # laxer clip for the target variable “shares”
+
+  # If you want to override which columns get z-score clipping,
+  # uncomment and edit the next two blocks.  Otherwise the defaults
+  # inside `calibration.py` are used.
+  #
+  # cols_clip_counts:
+  #   - n_tokens_title
+  #   - n_tokens_content
+  #   - num_imgs
+  #   - num_videos
+  #
+  # cols_clip_kw:
+  #   - kw_min_min
+  #   - kw_avg_min
+  #   - kw_min_avg
