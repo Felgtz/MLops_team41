@@ -1,0 +1,26 @@
+online-news-popularity/
+├── data/                  # raw, interim, processed (tracked by DVC or Git-LFS)
+├── notebooks/             # lightweight demo notebooks (no heavy logic)
+│   └── 01_eda_driver.ipynb
+├── src/
+│   ├── online_news_popularity/
+│   │   ├── __init__.py
+│   │   ├── io.py               # read/write helpers (local, S3, GDrive optional)
+│   │   ├── cleaning/
+│   │   │   ├── type_coercion.py
+│   │   │   ├── enforcement.py
+│   │   │   ├── imputation.py
+│   │   │   └── calibration.py
+│   │   ├── features/groups.py  # central definition of LDA_COLS, RATE_COLS, etc.
+│   │   └── pipeline/
+│   │       └── clean_dataset.py  # CLI entrypoint that chains the above steps
+│   └── tests/
+│       ├── test_type_coercion.py
+│       ├── test_enforcement.py
+│       └── ...
+├── configs/
+│   ├── paths.yaml          # where raw / interim / final artefacts live
+│   └── clean.yaml          # parameters for each cleaning step
+├── pyproject.toml or setup.cfg   # package metadata, dependencies
+├── requirements.txt or environment.yml
+└── README.md
