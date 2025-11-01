@@ -32,7 +32,8 @@ Requires-Dist: mypy; extra == "dev"
 5. mlopstec_env\Scripts\activate (after running this line you will see mlopstec_env at the beginning of the command line)
 6. pip install -e . --extra-index-url https://pypi.org/simple --extra-index-url https://pypi.ford.com/simple
 
-python -m src.cli preprocess
+## how to run the program
+mlops41 preprocess
 
 
 
