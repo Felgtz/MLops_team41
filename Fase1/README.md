@@ -1,4 +1,5 @@
 # MLOps Team 41 – Online News Popularity
+# PHASE 1
 
 ## Project Overview
 This repository contains the complete work developed during **Phase 1** of the MLOps course at **Tecnológico de Monterrey (Applied Artificial Intelligence – MNA Program)**.  
