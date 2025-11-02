@@ -42,3 +42,5 @@ __pycache__/
 *.pyc
 .DS_Store
 .ipynb_checkpoints/
+
+.dvc/config.local
