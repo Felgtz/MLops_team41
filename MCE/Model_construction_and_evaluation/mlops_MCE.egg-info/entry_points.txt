@@ -1,3 +1,0 @@
-[console_scripts]
-predict = src.scripts.predict:main
-train = src.scripts.train:main

@@ -12,6 +12,28 @@ data:
   random_state: 42                   # reproducible split
   stratify: false                    # set to true for classification tasks
 
+seed: 42
+
+feature_selection:
+  drop: []              # columnas a eliminar si aplica
+  corr_threshold: 0.85  # umbral para podar variables muy correlacionadas
+
+target_transform:
+  method: "none"        # o "log1p" si quieres modelar log(shares+1)
+
+modeling:
+  cv_folds: 5
+  gradient_boosting:
+    xgboost:
+      enabled: true
+      n_estimators: 300
+      learning_rate: 0.05
+      max_depth: 6
+      subsample: 0.8
+      colsample_bytree: 0.8
+      reg_lambda: 1.0
+      n_jobs: -1
+      
 baseline:
   task: regression
   models: ["linear", "random_forest"]
@@ -25,5 +47,28 @@ boosting:
 
 output:
   root: outputs
+  artifacts_dir: outputs          # o "outputs/artifacts" si prefieres
   models_subdir: models          # ← REQUIRED
+  metrics_subdir: metrics
+  feature_list_file: features_used.csv
   leaderboard_filename: leaderboard.csv
+ 
+
+
+#Estos bloques activan el tracking con MLflow.
+  # --- MLflow tracking ---
+tracking:
+  use_mlflow: true
+  tracking_uri: "file:./mlruns"      # usa carpeta local mlruns/ para el tracking
+  experiment_name: "onp-xgb-regression"
+
+# --- Model Registry ---
+registry:
+  use_registry: true
+  model_name: "onp-regressor"
+  set_alias: "champion"              # alias para el mejor modelo
+
+# --- Opciones extra de entrenamiento ---
+training:
+  compare_with_rf: true              # entrena RF como control además de XGB
+  artifacts_dir: "outputs/artifacts" # carpeta donde guardamos gráficas, etc.
