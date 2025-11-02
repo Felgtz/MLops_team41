@@ -1,0 +1,77 @@
+# ───────────────────────────────── experiment.yaml ───────────────────────────
+# Master configuration for the training pipeline
+# Adjust `data.path` and `data.target_column` to match your dataset.
+# -----------------------------------------------------------------------------
+
+seed: 42                     # <── NEW, used for all random_state/np.random
+
+data:
+  path: "C:/Users/FGUTIE63/Desktop/MLOps/Fase 2/MLops_team41-main/MLops_team41-main/MCE/Model_construction_and_evaluation/data/raw/df_ready_for_modeling.csv"
+  target_column: shares                # <── change if needed
+  test_size: 0.2
+  stratify: false                            # true for classification tasks
+  random_state: 42
+
+# -----------------------------------------------------------------------------    
+feature_selection:
+  enabled: true            # false → skip this step entirely
+  method: variance         # options: variance | mutual_info | rf_importance
+  variance_threshold: 0.0  # used only by "variance"
+  corr_threshold: 0.85
+  top_k: 50                # used by mutual_info / rf_importance
+  drop:                # columns to discard before any selection logic
+    - url
+    - mixed_type_col                     # any other object columns
+    - average_token_length
+    - kw_avg_min
+    - kw_avg_max
+    - kw_avg_avg
+    - avg_positive_polarity
+    - avg_negative_polarity
+    - self_reference_min_shares
+    - self_reference_max_shares
+    - self_reference_avg_sharess
+    - timedelta
+    - is_weekend
+    - weekday_is_sunday
+    - mixed_type_col
+    - n_non_stop_unique_tokens
+
+
+# -----------------------------------------------------------------------------    
+target_transform:
+  method: none      # options: none | log1p
+
+# -----------------------------------------------------------------------------    
+modeling:
+  cv_folds: 5           # how many K-folds for cross-validation
+  # -----------------------------------------------------------------
+  # Baseline models (usually simple and fast)
+  baseline:
+    enabled: true       # pipeline will skip if set to false
+    models:
+      - linear_regression
+      - random_forest
+  # -----------------------------------------------------------------
+  # Gradient boosting family
+  gradient_boosting:
+    xgboost:
+      enabled: true
+      n_estimators: 500
+      learning_rate: 0.05
+      max_depth: 6
+      subsample: 0.8
+      colsample_bytree: 0.8
+      reg_lambda: 1.0
+      n_jobs: -1
+
+# -----------------------------------------------------------------------------    
+output:
+  root: outputs            # base folder for all artifacts
+  artifacts_dir: artifacts # → outputs/artifacts/
+  models_subdir: models    # → outputs/models/
+  metrics_subdir: metrics  # → outputs/metrics/
+  leaderboard_filename: leaderboard.csv
+  metrics_filename: metrics.json
+  feature_list_file: feature_list.csv    # ← NEW LINE (required)
+# ─────────────────────────────────────────────────────────────────────────────
