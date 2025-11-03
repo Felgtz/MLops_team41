@@ -146,14 +146,14 @@ mlflow ui --port 5000
 
 ## Deliverables (Phase 2)
 
-| Deliverable | Description | Status |
-|--------------|-------------|---------|
-| **Refactored Project Structure** | Implemented via Cookiecutter | ✅ Completed |
-| **DVC Integration** | Pipeline reproducibility and dataset versioning | ✅ Completed |
-| **MLflow Integration** | Experiment tracking and metrics logging | ✅ In progress |
-| **Executive Presentation (PDF)** | Summary of methodology and results | ⏳ Pending |
-| **Final Video (≤ 5 min)** | Explanation and walkthrough of project | ⏳ Pending |
-| **README Documentation** | Technical and structural documentation | ✅ This file |
+| Deliverable | Description |
+|--------------|-------------|
+| **Refactored Project Structure** | Implemented via Cookiecutter |
+| **DVC Integration** | Pipeline reproducibility and dataset versioning |
+| **MLflow Integration** | Experiment tracking and metrics logging |
+| **Executive Presentation (PDF)** | Summary of methodology and results |
+| **Final Video (≤ 5 min)** | Explanation and walkthrough of project |
+| **README Documentation** | Technical and structural documentation |
 
 ---
 
