@@ -9,18 +9,17 @@
 ## how to run the program
 mlops41 preprocess
 
-
-
-Online News Popularity – MLOps Course Project (Team 41)
+## Online News Popularity – MLOps Course Project (Team 41)
 This repository contains all code, data pipelines, and documentation for Phase 1 of Team 41’s MLOps capstone at Tecnológico de Monterrey.
 The objective is to build a fully reproducible workflow that explores, preprocesses, models, and ultimately deploys predictions for the Online News Popularity dataset.
 
-1. Quick links
+## Quick links
 Project board → https://github.com/<org>/mlops-team41/projects/1
 Dataset source → UCI ML Repository – Online News Popularity
 Latest report → reports/ folder (HTML & figures)
-2. Repository layout
 
+## Repository layout
+```
 project_root/
 │
 ├── notebooks/                     ← Jupyter notebooks (EDA, modeling, …)
@@ -48,29 +47,32 @@ project_root/
 ├── requirements.txt               ← runtime deps (alt install)
 ├── requirements-dev.txt           ← lint / test / formatting extras
 └── README.md                      ← you are here
-3. Quick start
+```
+
+## Quick start
 bash
 
-# 0️⃣  Create & activate a virtual environment (conda, venv, etc.)
+## 0.  Create & activate a virtual environment (conda, venv, etc.)
 python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 
-# 1️⃣  Install project in editable mode + dev helpers
+## 1.  Install project in editable mode + dev helpers
 pip install -e ".[dev]"            # uses pyproject.toml
-# or, if you prefer plain files
-# pip install -r requirements.txt
-# pip install -r requirements-dev.txt
+**or, if you prefer plain files**
+**pip install -r requirements.txt**
+**pip install -r requirements-dev.txt**
 
-# 2️⃣  Place the raw dataset in data/raw/
-#     e.g. data/raw/df_final_validated.csv
+## 2.  Place the raw dataset in data/raw/
+**e.g. data/raw/df_final_validated.csv**
 
-# 3️⃣  Launch JupyterLab
+## 3.  Launch JupyterLab
 jupyter lab
-# open notebooks/02_data_exploration_preprocessing.ipynb and run
+**open notebooks/02_data_exploration_preprocessing.ipynb and run**
 
-# 4️⃣  (Optional) Run quick CLI helper
+## 4.  (Optional) Run quick CLI helper
 mlops41-quickinfo data/raw/df_final_validated.csv
-4. Project stages
+
+## 5. Project stages
 Phase	Notebook / Script	Output artefact	Tools
 1. EDA & Data Validation	02_data_exploration_preprocessing.ipynb	reports/figures/*.png	pandas, seaborn
 2. Feature Pre-processing	same notebook	data/processed/df_ready_for_modeling.csv	scikit-learn
@@ -95,21 +97,23 @@ df_scaled = scale_features(df, exclude=["shares"])
 run_pca(df_scaled, hue=None, save=True)
 All plots are automatically saved to reports/figures/.
 
-6. Testing & linting
+## 6. Testing & linting
 bash
 
 pytest -q                 # unit tests
 black . && isort .        # formatting
 flake8                    # static analysis
 pre-commit install        # set up git hooks
-7. Authors
+
+## 7. Authors
 Angel Iván Ahumada Arguelles — Data Engineer
 Steven Sebastian Brutscher Cortez — Data Scientist
 Ana Karen Estupiñán Pacheco — Software Engineer
 Felipe de Jesús Gutiérrez Dávila — ML Engineer
-8. License
+
+## 8. License
 This project is released under the MIT License – see LICENSE for details.
 
-9. Acknowledgements
+## 9. Acknowledgements
 UCI Machine Learning Repository for providing the Online News Popularity dataset.
 The Tecnológico de Monterrey MLOps course team for guidance and feedback.
