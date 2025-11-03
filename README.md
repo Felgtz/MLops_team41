@@ -23,6 +23,7 @@ It continues the work developed in *Phase 1*, improving maintainability, traceab
 
 ## Repository Structure (Main Branch)
 
+```
 repo-root/
 │
 ├── .dvc/ # DVC configuration folder (contains remote setup)
@@ -84,7 +85,7 @@ repo-root/
 │ └── README.md # Phase 1 documentation
 │
 └── README.md (this file)
-
+```
 
 ---
 
