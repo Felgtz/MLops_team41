@@ -6,7 +6,7 @@
 5. mlopstec_env\Scripts\activate (after running this line you will see mlopstec_env at the beginning of the command line)
 6. pip install -e . --extra-index-url https://pypi.org/simple --extra-index-url https://pypi.ford.com/simple
 
-## how to run the program
+## How to run the program
 mlops41 preprocess
 
 ## Online News Popularity – MLOps Course Project (Team 41)
@@ -14,8 +14,11 @@ This repository contains all code, data pipelines, and documentation for Phase 1
 The objective is to build a fully reproducible workflow that explores, preprocesses, models, and ultimately deploys predictions for the Online News Popularity dataset.
 
 ## Quick links
-Project board → https://github.com/<org>/mlops-team41/projects/1
+
+Project board → https://github.com/<org>/mlops-team41
+
 Dataset source → UCI ML Repository – Online News Popularity
+
 Latest report → reports/ folder (HTML & figures)
 
 ## Repository layout
@@ -117,3 +120,4 @@ This project is released under the MIT License – see LICENSE for details.
 ## 9. Acknowledgements
 UCI Machine Learning Repository for providing the Online News Popularity dataset.
 The Tecnológico de Monterrey MLOps course team for guidance and feedback.
+
