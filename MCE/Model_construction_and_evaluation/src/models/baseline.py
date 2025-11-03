@@ -21,7 +21,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Dict, List, Tuple
-
+from math import sqrt
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
@@ -37,7 +37,9 @@ from sklearn.metrics import (
 )
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
-
+import joblib
+from pathlib import Path
+from math import sqrt
 
 # ---------------------------------------------------------------------------
 # Configuration object
@@ -126,32 +128,52 @@ def train_and_evaluate(
     X_test: pd.DataFrame | np.ndarray,
     y_train: pd.Series | np.ndarray,
     y_test: pd.Series | np.ndarray,
-) -> Dict[str, float]:
+    *,
+    save_dir: str | Path = "artifacts/models",
+) -> tuple[pd.DataFrame, dict[str, BaseEstimator]]:
     """
-    Fit each baseline model and return a single evaluation metric.
-
-    * Regression → R² score
-    * Classification → Accuracy
+    Fit every baseline model, compute the usual regression metrics and
+    SAVE each fitted estimator to <save_dir>/<model_name>.pkl.
 
     Returns
     -------
-    dict
-        Mapping ``name → score``.
+    leaderboard : pd.DataFrame
+        One row per model with RMSE, MAE, R2.
+    trained     : dict[str, estimator]
+        The fitted objects so the pipeline can decide which one is “best”.
     """
-    models = get_models(cfg)
-    scores: Dict[str, float] = {}
+    # ------------------------------------------------------------
+    # 0. Path handling FIRST so we can use it safely everywhere
+    # ------------------------------------------------------------
+    save_dir = Path(save_dir)
+    save_dir.mkdir(parents=True, exist_ok=True)
+
+    models     = get_models(cfg)
+    rows       = []
+    trained    = {}
 
     for name, model in models.items():
         model.fit(X_train, y_train)
-
         y_pred = model.predict(X_test)
 
-        if cfg.task == "regression":
-            scores[name] = r2_score(y_test, y_pred)
-        else:
-            scores[name] = accuracy_score(y_test, y_pred)
+        # leaderboard row ---------------------------------------
+        rows.append(
+            {
+                "model":  name,
+                "family": "baseline",
+                "RMSE":   sqrt(mean_squared_error(y_test, y_pred)),
+                "MAE":    mean_absolute_error(y_test, y_pred),
+                "R2":     r2_score(y_test, y_pred),
+            }
+        )
 
-    return scores
+        # save artefact -----------------------------------------
+        out_path = save_dir / f"{name}.pkl"
+        joblib.dump(model, out_path)
+        trained[name] = model
+
+    leaderboard = pd.DataFrame(rows).sort_values("RMSE")
+    return leaderboard, trained
 
 
 # ---------------------------------------------------------------------------

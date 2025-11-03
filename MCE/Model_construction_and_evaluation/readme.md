@@ -1,3 +1,11 @@
+How to run
+
+train --config "C:\Users\FGUTIE63\Desktop\MLOps\Fase 2\MLops_team41-main\MLops_team41-main\MCE\Model_construction_and_evaluation\src\config\experiment.yaml"
+
+predict --model best_model --input X_test.csv --features artifacts/feature_list.csv --output preds.csv --transform none
+
+
+
 # 🏗️  Tabular ML Boilerplate
 
 **One-command** end-to-end pipeline for tabular (regression or classification)

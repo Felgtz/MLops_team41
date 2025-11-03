@@ -86,45 +86,61 @@ def list_available_models(artifacts_dir: str | Path = "artifacts") -> List[str]:
 
 
 def run_prediction(
-    X: pd.DataFrame,
-    *,
-    model_key: str,
+    X: pd.DataFrame | None = None,          # old name
+    *,                                      # keyword-only below
+    df: pd.DataFrame | None = None,         # new alias
+    model_key: str | None = None,
+    model_path: str | Path | None = None,   # new alias
     artifacts_dir: str | Path = "artifacts",
-    log_target: bool = True,
+    feature_list: list[str] | None = None,  # new
+    transform: str = "log1p",               # "log1p" or "none"
     return_numpy: bool = False,
 ):
     """
     Make predictions with a stored estimator.
 
-    Parameters
-    ----------
-    X : pd.DataFrame
-        Feature matrix.
-    model_key : str
-        Filename stem of the pickled model, e.g. ``"baseline_linear_regression"``
-        if the artefact is *artifacts/models/baseline_linear_regression.pkl*.
-    artifacts_dir : str | Path, default "artifacts"
-        Root directory that contains *models/*.
-    log_target : bool, default True
-        If True, assumes the estimator was trained on log-space targets and
-        applies ``np.expm1`` to bring predictions back to the original scale.
-    return_numpy : bool, default False
-        If True, return a 1-D ``np.ndarray``; otherwise a ``pd.Series``.
-
-    Returns
-    -------
-    pd.Series | np.ndarray
-        Predictions in the original target scale.
+    You may supply either
+      • model_key  + artifacts_dir
+      • model_path (full path)
+    and either
+      • X          (old name)
+      • df         (alias)
     """
-    model_path = Path(artifacts_dir) / "models" / f"{model_key}.pkl"
-    model = load_model(model_path)
+    # ------------------------------------------------------------------
+    # 0. Resolve aliases                                                |
+    # ------------------------------------------------------------------
+    if X is None and df is None:
+        raise ValueError("Provide X= or df=")
+    if X is not None and df is not None:
+        raise ValueError("Provide only one of X=  or df=, not both")
+    X = X if X is not None else df
 
-    logger.info("Running inference on %d rows …", len(X))
+   # ------------------------------------------------------------
+    # figure out which .pkl file we must open
+    # ------------------------------------------------------------
+    if model_path is None and model_key is None:
+        raise ValueError("Provide either model_path or model_key")
+
+    if model_path is None:                      # user gave a key
+        model_path = Path(artifacts_dir) / "models" / f"{model_key}.pkl"
+    else:                                       # user gave a full/relative path
+        model_path = Path(model_path)           # ← DO NOT prepend/append anything
+
+    # reorder / subset columns if a list is supplied
+    if feature_list is not None:
+        X = X[feature_list]
+
+    # ------------------------------------------------------------------
+    # 1. Load model and predict                                         |
+    # ------------------------------------------------------------------
+    model = load_model(model_path)
     preds = model.predict(X)
 
-    if log_target:
+    # inverse transform if necessary
+    if transform == "log1p":
         preds = np.expm1(preds)
+    elif transform != "none":
+        raise ValueError("transform must be 'log1p' or 'none'")
 
-    if return_numpy:
-        return preds
-    return pd.Series(preds, name="prediction")
+    return preds if return_numpy else pd.Series(preds, name="prediction")
+

@@ -53,9 +53,11 @@ def main() -> None:
 
     print("\n=== Final Leaderboard ===")
     print(
-        leaderboard[["model", "RMSE_test", "MAE_test", "R2_test"]]
-        .to_string(index=False, justify="center")
-    )
+        leaderboard[["model", "RMSE", "MAE", "R2"]]
+        .sort_values("RMSE")
+        .head(10)
+        .to_string(index=False)
+        )
 
 
 # --------------------------------------------------------------------------- #

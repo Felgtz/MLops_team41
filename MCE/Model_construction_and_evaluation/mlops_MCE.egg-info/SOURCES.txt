@@ -25,4 +25,6 @@ src/scripts/predict.py
 src/scripts/train.py
 src/tests/test_train.py
 src/utils/__init__.py
+src/utils/dataframe_ops.py
+src/utils/feature_selection.py
 src/utils/io.py

@@ -27,7 +27,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.models.predict import predict
+from src.models.predict import run_prediction
 from src.utils import ensure_dir
 
 # --------------------------------------------------------------------------- #
@@ -97,10 +97,10 @@ def main() -> None:
     df_in = pd.read_csv(args.input)
     feature_list = pd.read_csv(args.features)["feature"].tolist()
 
-    # Run inference
-    preds = predict(
-        model_path=args.model,
+    preds = run_prediction(
         df=df_in,
+        model_key=args.model,          # ← key, e.g. "xgboost"
+        artifacts_dir="artifacts",     # adjust if you store models elsewhere
         feature_list=feature_list,
         transform=args.transform,
     )

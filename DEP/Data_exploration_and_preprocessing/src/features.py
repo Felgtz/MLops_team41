@@ -19,6 +19,7 @@ import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer          # ← NEW
 
 from . import logger
 
@@ -30,45 +31,64 @@ def scale_features(
     *,
     exclude: Iterable[str] | None = None,
     return_scaler: bool = False,
+    impute: bool = True,               # default = on
 ) -> pd.DataFrame | tuple[pd.DataFrame, StandardScaler]:
     """
     Standard-scale every numeric column except those in *exclude*.
+    Numeric NaNs are replaced with the column median; if a column is entirely
+    NaN, the value 0.0 is used instead.
 
     Parameters
     ----------
     df :
         Input DataFrame.
     exclude :
-        Column names to leave untouched (e.g. the target variable).
+        Column names to leave untouched (e.g. target variable).
     return_scaler :
-        If True, also return the fitted ``StandardScaler`` instance.
-
-    Returns
-    -------
-    pandas.DataFrame
-        The DataFrame with scaled features.
-    (optionally) sklearn.preprocessing.StandardScaler
-        Only when *return_scaler* is True.
+        If True, also return the fitted StandardScaler instance.
+    impute :
+        Whether to fill numeric NaNs before scaling.
     """
     exclude = set(exclude or [])
+
+    # 0️⃣  Make numeric-looking object columns into real floats ------------
+    df_work = df.copy()
+    obj_cols = df_work.select_dtypes(include=["object"]).columns
+    for c in obj_cols:
+        try:
+            df_work[c] = pd.to_numeric(df_work[c])
+        except ValueError:
+            # non-numeric strings remain as object dtype
+            pass
+
+    # 1️⃣  Select numeric feature columns ----------------------------------
     numeric_cols: list[str] = [
-        c for c in df.select_dtypes(include=[np.number]).columns if c not in exclude
+        c for c in df_work.select_dtypes(include=[np.number]).columns
+        if c not in exclude
     ]
 
     if not numeric_cols:
         logger.warning("scale_features: no numeric columns found to scale.")
-        return (df.copy(), None) if return_scaler else df.copy()
+        return (df_work, None) if return_scaler else df_work
 
-    logger.info(
-        "Scaling %d numeric columns; leaving %d column(s) untouched.",
-        len(numeric_cols),
-        len(exclude),
-    )
+    # 2️⃣  Impute -----------------------------------------------------------
+    if impute:
+        na_cols = [c for c in numeric_cols if df_work[c].isna().any()]
+        if na_cols:
+            logger.debug(
+                "Imputing missing values in %d numeric column(s) with the median.",
+                len(na_cols),
+            )
+            for c in na_cols:
+                med = df_work[c].median()
+                fill_val = 0.0 if np.isnan(med) else med
+                df_work[c].fillna(fill_val, inplace=True)
 
+    # 3️⃣  Scale ------------------------------------------------------------
     scaler = StandardScaler()
-    scaled_values = scaler.fit_transform(df[numeric_cols])
+    scaled_values = scaler.fit_transform(df_work[numeric_cols])
 
-    df_scaled = df.copy()
+    df_scaled = df_work.copy()
     df_scaled.loc[:, numeric_cols] = scaled_values
 
     return (df_scaled, scaler) if return_scaler else df_scaled

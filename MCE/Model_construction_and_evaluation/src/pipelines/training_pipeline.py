@@ -1,23 +1,14 @@
-# src/pipelines/training_pipeline.py
 """
+src.pipelines.training_pipeline
+===============================
+
 End-to-end training pipeline.
 
-Why another file?
------------------
-`src/models/train.py` is a convenient *script* entry-point, but importing a
-script from Python code is clunky.  This module provides a reusable,
-object-oriented façade (`TrainingPipeline`) that you can call from:
-
-• Jupyter notebooks  
-• Unit tests  
-• REST / FastAPI services for on-demand retraining  
-• Hyper-parameter search frameworks (Optuna, Ray Tune…)
-
-Public API
-----------
+Public usage
+------------
 >>> from src.pipelines.training_pipeline import TrainingPipeline
->>> leaderboard = TrainingPipeline("src/config/experiment.yaml").run()
->>> leaderboard.head()
+>>> lb = TrainingPipeline("src/config/experiment.yaml").run()
+>>> lb.head()
 """
 
 from __future__ import annotations
@@ -30,26 +21,44 @@ from typing import Dict
 import numpy as np
 import pandas as pd
 import yaml
+import joblib
 
+# ------------------------------------------------------------------ #
+# project helpers
+# ------------------------------------------------------------------ #
 from src.data import DataConfig, load_and_split
 from src.features import drop_columns, drop_high_corr_features
-from src.models.baseline import BaselineConfig, train_and_evaluate as run_baselines
-from src.models.boosting import BoostingConfig, train_and_evaluate as run_boosting
+from src.models.baseline import (
+    BaselineConfig,
+    train_and_evaluate as run_baselines,
+)
+from src.models.boosting import (
+    BoostingConfig,
+    train_and_evaluate as run_boosting,
+)
 from src.utils.io import ensure_dir
+from src.utils.dataframe_ops import drop_columns
+from src.utils.feature_selection import drop_high_corr_features
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
+
+# ------------------------------------------------------------------ #
+# main façade
+# ------------------------------------------------------------------ #
 class TrainingPipeline:
     """Encapsulates the full experiment defined by a YAML file."""
 
     def __init__(self, cfg_path: str | Path):
         self.cfg_path = Path(cfg_path)
-        self.cfg: Dict = yaml.safe_load(self.cfg_path.read_text())
+        self.cfg: Dict = yaml.safe_load(
+            self.cfg_path.read_text(encoding="utf-8")
+        )
         logger.info("Loaded config from %s", self.cfg_path)
 
-        # Pre-compute some frequently-used paths
+        # Prepare output folders
         out_root = Path(self.cfg["output"]["artifacts_dir"])
         self.models_dir = ensure_dir(out_root / self.cfg["output"]["models_subdir"])
         self.metrics_dir = ensure_dir(out_root / self.cfg["output"]["metrics_subdir"])
@@ -57,7 +66,9 @@ class TrainingPipeline:
     # ------------------------------------------------------------------ #
     # 1. DATA                                                            #
     # ------------------------------------------------------------------ #
-    def _load_data(self) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+    def _load_data(
+        self,
+    ) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
         data_cfg = DataConfig(**self.cfg["data"])
         X_tr, X_te, y_tr, y_te = load_and_split(data_cfg)
         logger.info("Loaded data – train %s | test %s", X_tr.shape, X_te.shape)
@@ -67,7 +78,9 @@ class TrainingPipeline:
     # 2. FEATURE PRUNING                                                 #
     # ------------------------------------------------------------------ #
     def _prune_features(
-        self, X_tr: pd.DataFrame, X_te: pd.DataFrame
+        self,
+        X_tr: pd.DataFrame,
+        X_te: pd.DataFrame,
     ) -> tuple[pd.DataFrame, pd.DataFrame]:
         fs_cfg = self.cfg["feature_selection"]
 
@@ -82,8 +95,10 @@ class TrainingPipeline:
 
         logger.info("After pruning – %d features left", X_tr.shape[1])
 
-        # Persist the final feature list so predict.py can reuse it
-        feature_csv = self.metrics_dir.parent / self.cfg["output"]["feature_list_file"]
+        # Persist feature list for predict.py
+        feature_csv = (
+            self.metrics_dir.parent / self.cfg["output"]["feature_list_file"]
+        )
         pd.Series(X_tr.columns, name="feature").to_csv(feature_csv, index=False)
         logger.debug("Saved feature list to %s", feature_csv)
 
@@ -96,11 +111,11 @@ class TrainingPipeline:
         method = self.cfg["target_transform"].get("method", "none").lower()
         if method == "log1p":
             return np.log1p(y)
-        if method in ("none", "", None):
+        if method in {"none", "", None}:
             return y.values  # noqa: NPY002
         raise NotImplementedError(f"Unsupported target transform: {method}")
 
-    # ------------------------------------------------------------------ #
+   # ------------------------------------------------------------------ #
     # 4. MODEL TRAINING                                                  #
     # ------------------------------------------------------------------ #
     def _train_models(
@@ -111,35 +126,52 @@ class TrainingPipeline:
         y_te: pd.Series,
     ) -> pd.DataFrame:
         seed = self.cfg["seed"]
-        cv_folds = self.cfg["modeling"]["cv_folds"]
-        artifacts_dir = Path(self.cfg["output"]["artifacts_dir"])
 
-        # 4.1 Baselines
-        bl_cfg = BaselineConfig(
-            seed=seed,
-            cv_folds=cv_folds,
-            artifacts_dir=artifacts_dir,
-        )
-        bl_metrics = run_baselines(X_tr, y_tr_trans, X_te, y_te, cfg=bl_cfg)
+        # 4.1 Baselines --------------------------------------------------
+        bl_cfg = BaselineConfig(random_state=seed)
+        bl_df, bl_models = run_baselines(bl_cfg, X_tr, X_te, y_tr_trans, y_te)
 
-        # 4.2 Boosting
-        xgb_cfg_yaml = self.cfg["modeling"]["gradient_boosting"]["xgboost"]
+        # 4.2 Boosting ---------------------------------------------------
+        xgb_yaml = self.cfg["modeling"]["gradient_boosting"]["xgboost"]
         boost_cfg = BoostingConfig(
-            seed=seed,
-            cv_folds=cv_folds,
-            artifacts_dir=artifacts_dir,
-            xgb_enabled=xgb_cfg_yaml["enabled"],
-            xgb_n_estimators=xgb_cfg_yaml["n_estimators"],
-            xgb_learning_rate=xgb_cfg_yaml["learning_rate"],
-            xgb_max_depth=xgb_cfg_yaml["max_depth"],
-            xgb_subsample=xgb_cfg_yaml["subsample"],
-            xgb_colsample_bytree=xgb_cfg_yaml["colsample_bytree"],
-            xgb_reg_lambda=xgb_cfg_yaml["reg_lambda"],
-            xgb_n_jobs=xgb_cfg_yaml["n_jobs"],
+            random_state       = seed,
+            xgb_enabled        = xgb_yaml["enabled"],
+            xgb_n_estimators   = xgb_yaml["n_estimators"],
+            xgb_learning_rate  = xgb_yaml["learning_rate"],
+            xgb_max_depth      = xgb_yaml["max_depth"],
+            xgb_subsample      = xgb_yaml["subsample"],
+            xgb_colsample_bytree = xgb_yaml["colsample_bytree"],
+            xgb_reg_lambda     = xgb_yaml["reg_lambda"],
+            xgb_n_jobs         = xgb_yaml["n_jobs"],
         )
-        boost_metrics = run_boosting(X_tr, y_tr_trans, X_te, y_te, cfg=boost_cfg)
+        boost_df, bst_models = run_boosting(
+            boost_cfg, X_tr, X_te, y_tr_trans, y_te
+        )
 
-        return pd.concat([bl_metrics, boost_metrics], ignore_index=True)
+        # 4.3 Combine leaderboards --------------------------------------
+        leaderboard = pd.concat([bl_df, boost_df], ignore_index=True)
+
+        # 4.4 Persist models --------------------------------------------
+        # directory is prepared in __init__
+        all_models = {**bl_models, **bst_models}
+
+        # 4.4.1 save each individual model
+        for name, est in all_models.items():
+            out_path = self.models_dir / f"{name}.pkl"
+            joblib.dump(est, out_path)
+            logger.debug("Saved %s", out_path)
+
+        # 4.4.2 save the single best model (lowest RMSE)
+        best_name  = leaderboard.sort_values("RMSE").iloc[0]["model"]
+        best_model = all_models[best_name]
+        joblib.dump(best_model, self.models_dir / "best_model.pkl")
+        logger.info(
+            "Saved best model (%s) → %s",
+            best_name,
+            self.models_dir / "best_model.pkl",
+        )
+
+        return leaderboard
 
     # ------------------------------------------------------------------ #
     # PUBLIC ENTRY-POINT                                                #
@@ -151,22 +183,24 @@ class TrainingPipeline:
         y_tr_trans = self._transform_target(y_tr)
 
         leaderboard = self._train_models(X_tr, y_tr_trans, X_te, y_te)
-        leaderboard = leaderboard.sort_values("RMSE_test").reset_index(drop=True)
 
         # Persist combined metrics
-        out_path = self.metrics_dir / "all_models_metrics.json"
-        out_path.write_text(json.dumps(leaderboard.to_dict(orient="records"), indent=2))
+        out_path = self.metrics_dir / "leaderboard.json"
+        out_path.write_text(
+            json.dumps(leaderboard.to_dict(orient="records"), indent=2)
+        )
         logger.info("Saved leaderboard to %s", out_path)
 
         return leaderboard
 
 
 # --------------------------------------------------------------------------- #
-#  Optional CLI wrapper – keeps arguments minimal                             #
+# Optional CLI wrapper                                                        #
 # --------------------------------------------------------------------------- #
 if __name__ == "__main__":
     logging.basicConfig(
-        level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s"
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)s | %(message)s",
     )
 
     import argparse
@@ -183,4 +217,4 @@ if __name__ == "__main__":
 
     lb = TrainingPipeline(args.config).run()
     print("\n=== Leaderboard ===")
-    print(lb[["model", "RMSE_test", "MAE_test", "R2_test"]])
+    print(lb)
