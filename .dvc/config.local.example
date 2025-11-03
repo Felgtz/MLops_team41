@@ -1,0 +1,4 @@
+﻿['remote "storage"']
+    gdrive_client_id = "YOUR_GOOGLE_CLIENT_ID"
+    gdrive_client_secret = "YOUR_GOOGLE_CLIENT_SECRET"
+    gdrive_use_service_account = false
