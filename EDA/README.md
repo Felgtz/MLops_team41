@@ -173,10 +173,15 @@ Add with dvc add EDA/online-news-popularity/data/raw/<file>.csv, commit the resu
 ## Credits
 
 Data Scientist: Steven
+
 Data Engineer: Ángel
+
 Software Engineer: Ana Karen
+
 ML Engineer: Felipe
+
 DevOps: Luis
+
 (Roles per Phase 2 team roster.)
 
 ## License
