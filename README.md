@@ -191,6 +191,22 @@ The upcoming Phase 3 will extend these results toward **deployment and model mon
 
 ---
 
+## Notes & Future Work
+
+- MLflow Integration: The team implemented an initial MLflow setup in the feature branch (feat/mlflow-ana). The UI runs locally (mlflow ui --port 5000) and the core tracking hooks (start/log/end run) are already sketched. After the deadline, we will finalize the integration inside the refactored training pipeline and merge the PR.
+
+- MCE Refactor (final stretch): The model pipeline’s final refactor is almost done (training complete, prediction path pending minor fixes). Next steps are to align configuration, ensure consistent I/O contracts, and add end-to-end tests.
+
+- DVC Hardening: DVC is configured and secrets were moved to .dvc/config.local for safety. Post-deadline we will (a) document team access to the GDrive remote, (b) add lightweight smoke tests for dvc pull/dvc repro, and (c) freeze experiment hashes for full reproducibility.
+
+- Helper Scripts: Minimal helper scripts for cleaning, EDA, and training were harvested safely and placed under MCE/Model_construction_and_evaluation/src/scripts/. We will wire them into Make/CLI targets and CI after the deadline.
+
+- Documentation Polish: Subfolder READMEs will be expanded with run commands, expected inputs/outputs, and troubleshooting. The executive deck and video links will also be cross-referenced here.
+
+- Repository Hygiene: Some experimental branches contain local environments or exploratory structures. We will keep main clean and gradually close or archive those branches after cherry-picking any useful, low-risk artifacts.
+
+---
+
 ## References
 - Cookiecutter Data Science Template – [drivendata/cookiecutter-data-science](https://github.com/drivendata/cookiecutter-data-science)  
 - DVC Documentation – [https://dvc.org/doc](https://dvc.org/doc)  
