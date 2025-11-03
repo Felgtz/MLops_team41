@@ -89,7 +89,7 @@ repo-root/
 
 ---
 
-## ⚙️ Pipeline Overview
+## Pipeline Overview
 
 The project’s pipeline integrates **DVC** and **MLflow** for reproducible experimentation and structured MLOps workflow.
 
