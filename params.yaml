@@ -1,0 +1,4 @@
+train_eval:
+  model: linear            # linear | ridge | lasso (example)
+  random_state: 42
+  test_size: 0.2
