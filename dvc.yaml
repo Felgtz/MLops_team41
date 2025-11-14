@@ -1,6 +1,7 @@
 stages:
   eda_clean:
     cmd: >
+      set PYTHONPATH=src &&
       python -m online_news_popularity.pipeline.clean_dataset
       --raw data/raw/online_news_modified.csv
       --reference data/raw/online_news_original.csv
