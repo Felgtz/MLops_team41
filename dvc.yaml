@@ -16,19 +16,22 @@ stages:
       - data/processed/df_final_validated.audit.json
       - data/processed/df_final_validated.csv
   dep_preprocess:
-    cmd: python -m src.cli preprocess
+    cmd: >
+      cp ../../EDA/online-news-popularity/data/processed/df_final_validated.csv
+         data/raw/df_final_validated.csv
+      && python -m src.cli preprocess
     wdir: DEP/Data_exploration_and_preprocessing
     deps:
-    - ../EDA/online-news-popularity/data/processed/df_final_validated.csv
-    - src/cli.py
-    - src/config.py
-    - src/data.py
-    - src/features.py
-    - src/logger.py
-    - src/visualization.py
+      - ../../EDA/online-news-popularity/data/processed/df_final_validated.csv
+      - src/cli.py
+      - src/config.py
+      - src/data.py
+      - src/features.py
+      - src/logger.py
+      - src/visualization.py
     outs:
-    - data/processed/df_ready_for_modeling.csv
-    - reports/figures
+      - data/processed/df_ready_for_modeling.csv
+      - reports/figures
   train_eval:
     cmd: python -m src.train_eval --in ../../DEP/Data_exploration_and_preprocessing/data/processed/df_ready_for_modeling.csv --model_out models/model.pkl --metrics_out metrics/metrics.json
     wdir: MCE/Model_construction_and_evaluation
