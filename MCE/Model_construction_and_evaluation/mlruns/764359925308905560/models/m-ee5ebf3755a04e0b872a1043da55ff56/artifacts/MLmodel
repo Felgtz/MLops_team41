@@ -1,0 +1,23 @@
+artifact_path: "/Users/felipegutierrez/Documents/4rto_trimestre/Operaciones de aprendizaje\
+  \ automa\u0301tico/Github_proyecto/MLops_team41/MCE/Model_construction_and_evaluation/mlruns/764359925308905560/models/m-ee5ebf3755a04e0b872a1043da55ff56/artifacts"
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.7
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.2
+mlflow_version: 3.3.2
+model_id: m-ee5ebf3755a04e0b872a1043da55ff56
+model_size_bytes: 2192
+model_uuid: m-ee5ebf3755a04e0b872a1043da55ff56
+prompts: null
+run_id: 2f19eba920f84d23a8511ef6781b054a
+utc_time_created: '2025-11-14 03:23:56.337593'

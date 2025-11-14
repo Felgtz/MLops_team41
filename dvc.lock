@@ -91,8 +91,8 @@ stages:
       size: 22745577
     - path: src/train_eval.py
       hash: md5
-      md5: 8386ba64f0af14a8ad3ba391b6e756d2
-      size: 2664
+      md5: f79d9e99e58e0c7bec53915b6e73c39b
+      size: 2679
     params:
       params.yaml:
         train_eval.model: ridge

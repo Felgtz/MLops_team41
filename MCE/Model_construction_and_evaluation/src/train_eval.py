@@ -30,12 +30,28 @@ def load_params():
     with params_path.open("r") as f:
         return yaml.safe_load(f)
 
+# MCE/Model_construction_and_evaluation/src/train_eval.py
+
+def prepare_data(df: pd.DataFrame, target_col: str = "shares"):
+    """Deja listas X e y para el modelo:
+       - Quita la columna target
+       - Se queda solo con columnas numéricas
+       - Elimina filas con NaNs
+    """
+    y = df[target_col]
+    X = df.drop(columns=[target_col])
+    X = X.select_dtypes(include="number")
+
+    combined = pd.concat([X, y], axis=1).dropna()
+    X_clean = combined[X.columns]
+    y_clean = combined[target_col]
+
+    return X_clean, y_clean
 
 def main():
     args = parse_args()
     params = load_params()
 
-    # If your params.yaml has a "train_eval" section (as DVC expects)
     train_params = params.get("train_eval", {})
     model_name = train_params.get("model", "linear")
     random_state = int(train_params.get("random_state", 42))
@@ -43,27 +59,12 @@ def main():
 
     # Data
     df = pd.read_csv(args.in_path)
+    X, y = prepare_data(df, target_col="shares")
 
-    target_col = "shares"
-    y = df[target_col]
-
-    # Drop target, keep only numeric columns
-    X = df.drop(columns=[target_col])
-    X = X.select_dtypes(include="number")
-
-    # ---- NEW: drop rows with any NaNs in X or y ----
-    combined = pd.concat([X, y], axis=1)
-    combined = combined.dropna()  # drop rows with missing values
-
-    X = combined[X.columns]
-    y = combined[target_col]
-
-    # Train/test split
     X_tr, X_te, y_tr, y_te = train_test_split(
         X, y, test_size=test_size, random_state=random_state
     )
 
-    # MLflow local tracking
     mlflow.set_tracking_uri("mlruns")
     mlflow.set_experiment("news_popularity")
 
@@ -77,7 +78,6 @@ def main():
         mse = mean_squared_error(y_te, preds)
         rmse = float(mse ** 0.5)
 
-        # Log to MLflow
         mlflow.log_params(
             {"model": model_name, "random_state": random_state, "test_size": test_size}
         )
@@ -85,7 +85,6 @@ def main():
         mlflow.log_metric("rmse", rmse)
         mlflow.sklearn.log_model(model, artifact_path="model")
 
-        # Persist artifacts
         joblib.dump(model, args.model_out)
         with open(args.metrics_out, "w") as f:
             json.dump({"r2": r2, "rmse": rmse}, f, indent=2)
