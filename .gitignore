@@ -5,3 +5,7 @@ __pycache__/
 .dvc/tmp/
 .env
 .dvc/config
+
+/EDA/online-news-popularity/data/raw/
+
+/EDA/online-news-popularity/data/processed/
