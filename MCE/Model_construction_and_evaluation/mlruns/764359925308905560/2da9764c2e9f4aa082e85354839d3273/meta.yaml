@@ -1,0 +1,15 @@
+artifact_uri: /Users/felipegutierrez/Documents/4rto_trimestre/Operaciones de aprendizaje
+  automático/Github_proyecto/MLops_team41/MCE/Model_construction_and_evaluation/mlruns/764359925308905560/2da9764c2e9f4aa082e85354839d3273/artifacts
+end_time: 1763088896468
+entry_point_name: ''
+experiment_id: '764359925308905560'
+lifecycle_stage: active
+run_id: 2da9764c2e9f4aa082e85354839d3273
+run_name: rebellious-bug-356
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763088896460
+status: 4
+tags: []
+user_id: felipegutierrez

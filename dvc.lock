@@ -1,12 +1,15 @@
 schema: '2.0'
 stages:
   dep_preprocess:
-    cmd: python -m src.cli preprocess
+    cmd: mkdir -p data/processed reports/figures && cp 
+      ../../EDA/online-news-popularity/data/processed/df_final_validated.csv 
+      data/processed/df_ready_for_modeling.csv
     deps:
-    - path: data/raw/df_final_validated.csv
+    - path: 
+        ../../EDA/online-news-popularity/data/processed/df_final_validated.csv
       hash: md5
-      md5: e4c0fece8fd2ed00e273f382fab7042e
-      size: 22784696
+      md5: bf55b661371815c65ee1b6acd5a94178
+      size: 22745577
     - path: src/cli.py
       hash: md5
       md5: b56dd75f602ff306100447c391df05d3
@@ -34,13 +37,13 @@ stages:
     outs:
     - path: data/processed/df_ready_for_modeling.csv
       hash: md5
-      md5: 46e3dfbf29bdaa62dafab861af3da590
-      size: 49036588
+      md5: bf55b661371815c65ee1b6acd5a94178
+      size: 22745577
     - path: reports/figures
       hash: md5
-      md5: 55ea92e1ad63fbfbc79ed13f61582a50.dir
-      size: 3928991
-      nfiles: 62
+      md5: d751713988987e9331980363e24189ce.dir
+      size: 0
+      nfiles: 0
   eda_clean:
     cmd: "python -m online_news_popularity.pipeline.clean_dataset --raw data/raw/online_news_modified.csv
       --reference data/raw/online_news_original.csv --final data/processed/df_final_validated.csv\n"
@@ -76,3 +79,31 @@ stages:
       hash: md5
       md5: bf55b661371815c65ee1b6acd5a94178
       size: 22745577
+  train_eval:
+    cmd: python -m src.train_eval --in 
+      ../../DEP/Data_exploration_and_preprocessing/data/processed/df_ready_for_modeling.csv
+      --model_out models/model.pkl --metrics_out metrics/metrics.json
+    deps:
+    - path: 
+        ../../DEP/Data_exploration_and_preprocessing/data/processed/df_ready_for_modeling.csv
+      hash: md5
+      md5: bf55b661371815c65ee1b6acd5a94178
+      size: 22745577
+    - path: src/train_eval.py
+      hash: md5
+      md5: 8386ba64f0af14a8ad3ba391b6e756d2
+      size: 2664
+    params:
+      params.yaml:
+        train_eval.model: ridge
+        train_eval.random_state: 42
+        train_eval.test_size: 0.2
+    outs:
+    - path: metrics/metrics.json
+      hash: md5
+      md5: 74a1d2a085c977a3c13ba6bca1ec71bb
+      size: 61
+    - path: models/model.pkl
+      hash: md5
+      md5: 1282634a5687e329e2385a1aac22c58b
+      size: 2473

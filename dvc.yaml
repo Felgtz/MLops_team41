@@ -16,11 +16,8 @@ stages:
       - data/processed/df_final_validated.audit.json
       - data/processed/df_final_validated.csv
   dep_preprocess:
-    cmd: >
-      cp ../../EDA/online-news-popularity/data/processed/df_final_validated.csv
-         data/raw/df_final_validated.csv
-      && python -m src.cli preprocess
     wdir: DEP/Data_exploration_and_preprocessing
+    cmd: mkdir -p data/processed reports/figures && cp ../../EDA/online-news-popularity/data/processed/df_final_validated.csv data/processed/df_ready_for_modeling.csv
     deps:
       - ../../EDA/online-news-popularity/data/processed/df_final_validated.csv
       - src/cli.py

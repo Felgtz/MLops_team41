@@ -1,0 +1,4 @@
+train_eval:
+  random_state: 42        # or the value your team decided
+  model: "ridge"          # or "linear_regression", "random_forest", etc.
+  test_size: 0.2          # 0.2 = 20% test split

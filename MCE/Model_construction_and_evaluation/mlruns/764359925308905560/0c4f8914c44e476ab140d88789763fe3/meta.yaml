@@ -1,0 +1,15 @@
+artifact_uri: /Users/felipegutierrez/Documents/4rto_trimestre/Operaciones de aprendizaje
+  automático/Github_proyecto/MLops_team41/MCE/Model_construction_and_evaluation/mlruns/764359925308905560/0c4f8914c44e476ab140d88789763fe3/artifacts
+end_time: 1763089148927
+entry_point_name: ''
+experiment_id: '764359925308905560'
+lifecycle_stage: active
+run_id: 0c4f8914c44e476ab140d88789763fe3
+run_name: useful-fowl-760
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763089147102
+status: 3
+tags: []
+user_id: felipegutierrez

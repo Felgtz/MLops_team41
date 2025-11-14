@@ -1,0 +1,11 @@
+artifact_location: /Users/felipegutierrez/Documents/4rto_trimestre/Operaciones de
+  aprendizaje automático/Github_proyecto/MLops_team41/MCE/Model_construction_and_evaluation/mlruns/764359925308905560/models/m-937d418bf73f411191f1ccd981231463/artifacts
+creation_timestamp: 1763089147123
+experiment_id: '764359925308905560'
+last_updated_timestamp: 1763089148925
+model_id: m-937d418bf73f411191f1ccd981231463
+model_type: null
+name: model
+source_run_id: 0c4f8914c44e476ab140d88789763fe3
+status: 2
+status_message: null
