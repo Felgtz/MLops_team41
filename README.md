@@ -218,3 +218,38 @@ The upcoming Phase 3 will extend these results toward **deployment and model mon
 
 **Ready to upload to the repository.**
 Save as `README_Phase2_Team41.md` in the main branch root.
+
+
+### DOCKER
+
+## Dockerized ML Service
+
+This repository contains the full MLOps pipeline for the Online News Popularity project (EDA, DEP, MCE) and a minimal FastAPI service wrapped in a Docker container.
+
+### Architecture
+
+The container is designed to expose a simple HTTP API that will later be connected to the trained model from the `MCE` module.
+
+**Project layout (simplified):**
+
+- `EDA/` – Exploratory Data Analysis.
+- `DEP/` – Data exploration and preprocessing.
+- `MCE/` – Model construction and evaluation.
+- `app/`
+  - `__init__.py`
+  - `main.py` – minimal FastAPI application (entrypoint for the service).
+- `requirements-docker.txt` – Python dependencies used inside the Docker image.
+- `Dockerfile` – build recipe for the Docker image.
+
+The Docker image:
+
+- Uses `python:3.10-slim` as base.
+- Installs all runtime dependencies from `requirements-docker.txt`.
+- Copies the whole repository into `/app`.
+- Starts a FastAPI app using Uvicorn on port `8000`.
+
+The default command in the container is:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+
